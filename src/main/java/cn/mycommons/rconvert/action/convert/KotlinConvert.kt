@@ -1,5 +1,6 @@
 package cn.mycommons.rconvert.action.convert
 
+import cn.mycommons.rconvert.action.ConvertKit
 import cn.mycommons.rconvert.util.logger
 import com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -51,10 +52,17 @@ class KotlinConvert(project: Project) {
             }
             r
         }.forEach {
-            if (it.text.startsWith("R.")) {
-                replaceExpression(it, "abc.R.string.abc")
-            } else if (it.text.contains(".R.")) {
-                replaceExpression(it, "abc.R.string.abc")
+//            if (it.text.startsWith("R.")) {
+//                replaceExpression(it, "abc.R.string.abc")
+//            } else if (it.text.contains(".R.")) {
+//                replaceExpression(it, "abc.R.string.abc")
+//            }
+
+            if (it.text.contains("R.")) {
+                val t = ConvertKit.findTarget(it.text)
+                if (t.first && t.second != null) {
+                    replaceExpression(it, t.second!!)
+                }
             }
         }
     }

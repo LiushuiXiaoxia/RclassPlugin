@@ -1,5 +1,6 @@
 package cn.mycommons.rconvert.action.convert
 
+import cn.mycommons.rconvert.action.ConvertKit
 import cn.mycommons.rconvert.util.logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.JavaRecursiveElementVisitor
@@ -44,10 +45,15 @@ class JavaConvert(
             r
         }.forEach {
             val qn = it.qualifiedName
-            if (qn.startsWith("R.")) {
-                replaceExpression(it, "abc.R.string.abc")
-            } else if (qn.contains(".R.")) {
-                replaceExpression(it, "abc.R.string.abc")
+//            if (qn.startsWith("R.")) {
+//                replaceExpression(it, "abc.R.string.abc")
+//            } else if (qn.contains(".R.")) {
+//                replaceExpression(it, "abc.R.string.abc")
+//            }
+
+            val t = ConvertKit.findTarget(qn)
+            if (t.first && t.second != null) {
+                replaceExpression(it, t.second!!)
             }
         }
     }
