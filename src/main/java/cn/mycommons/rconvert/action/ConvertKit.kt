@@ -27,7 +27,7 @@ object ConvertKit {
         }
     }
 
-    fun findTarget(qn: String): Pair<Boolean, String?> {
+    fun findTarget(qn: String, filePackage: String? = null, rImportPackage: String? = null): Pair<Boolean, String?> {
         // val qn = it.qualifiedName
         val pkg = if (qn.startsWith("R.")) {
             ""
@@ -50,6 +50,15 @@ object ConvertKit {
             // package相同，则不修改
             if (pkgList.contains(pkg)) {
                 return false to qn
+            }
+            // 在当前package下，则不导入
+            if (filePackage != null && pkgList.contains(filePackage)) {
+                return false to filePackage
+            }
+
+            // 在当前import下，则不导入
+            if (rImportPackage != null && pkgList.contains(rImportPackage)) {
+                return false to filePackage
             }
 
             //  TODO XIAQIULEI 先选择第一个

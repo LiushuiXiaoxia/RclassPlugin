@@ -34,6 +34,14 @@ class JavaConvert(
             }
         }.apply { psiFile.accept(this) }
 
+        val filePackage = psiFile.packageName
+        val rImportPackage = psiFile.importList?.importStatements
+            ?.mapNotNull { it.qualifiedName }
+            ?.filter { it.endsWith(".R") }
+            ?.map { it.removeSuffix(".R") }
+            ?.firstOrNull()
+
+
         logger.info("PsiReferenceExpressions = ${set.size}")
         set.onEach {
             logger.info("PsiReferenceExpression: $psiFile -> ${it.qualifiedName}")
@@ -51,7 +59,9 @@ class JavaConvert(
 //                replaceExpression(it, "abc.R.string.abc")
 //            }
 
-            val t = ConvertKit.findTarget(qn)
+            val t = ConvertKit.findTarget(qn, filePackage, rImportPackage)
+            logger.println("findTarget: $qn -> $t")
+
             if (t.first && t.second != null) {
                 replaceExpression(it, t.second!!)
             }

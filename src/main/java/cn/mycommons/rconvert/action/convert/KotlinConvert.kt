@@ -39,7 +39,14 @@ class KotlinConvert(project: Project) {
 
         logger.info("KtDotQualifiedExpressions = ${set.size}")
 
-        val regex = Regex("[a-zA-Z._]+")
+        val filePackage = psiFile.packageFqName.asString()
+        val rImportPackage = psiFile.importList?.imports
+            ?.mapNotNull { it.importedFqName?.asString() }
+            ?.filter { it.endsWith(".R") }
+            ?.map { it.removeSuffix(".R") }
+            ?.firstOrNull()
+
+        val regex = Regex("[a-zA-Z0-9._]+")
 
         set.onEach {
             logger.info("KtDotQualifiedExpression: $psiFile -> ${it.text}")
@@ -58,11 +65,11 @@ class KotlinConvert(project: Project) {
 //                replaceExpression(it, "abc.R.string.abc")
 //            }
 
-            if (it.text.contains("R.")) {
-                val t = ConvertKit.findTarget(it.text)
-                if (t.first && t.second != null) {
-                    replaceExpression(it, t.second!!)
-                }
+            val t = ConvertKit.findTarget(it.text, filePackage, rImportPackage)
+            logger.println("findTarget: ${it.text} -> $t")
+
+            if (t.first && t.second != null) {
+                replaceExpression(it, t.second!!)
             }
         }
     }
