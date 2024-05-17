@@ -38,8 +38,8 @@ object ConvertKit {
             ""
         }
         // nb 的导入，不修改
-        if (pkg.contains("android.") || pkg.contains("androidx.") || pkg.contains(".google.")) {
-            return false to qn
+        if (qn.contains("android.") || qn.contains("androidx.") || qn.contains(".google.")) {
+            return false to pkg
         }
 
         val ss = qn.split(".").takeLast(2)
@@ -54,7 +54,7 @@ object ConvertKit {
             val pkgList = map[name]!!
             // package相同，则不修改
             if (pkgList.contains(pkg)) {
-                return false to qn
+                return false to pkg
             }
             // 在当前package下，则不导入
             if (filePackage != null && pkgList.contains(filePackage)) {
