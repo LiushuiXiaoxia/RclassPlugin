@@ -37,6 +37,11 @@ object ConvertKit {
         } else {
             ""
         }
+        // nb 的导入，不修改
+        if (pkg.contains("android.") || pkg.contains("androidx.") || pkg.contains(".google.")) {
+            return false to qn
+        }
+
         val ss = qn.split(".").takeLast(2)
         val type = ss.first()
         val name = ss.last()
