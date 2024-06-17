@@ -6,14 +6,17 @@ import java.io.File
 
 object ConvertKit {
 
-    const val dir = "/Users/ios-builder2/workspace/java-project/r-class-demo/r-ws-all"
+    fun getUserHome() = File(System.getProperty("user.home"))
+
+    // const val dir = "/Users/ios-builder2/workspace/java-project/r-class-demo/r-ws-all"
+    val dir = File(System.getProperty("user.dir"), "r-ws-all")
 
     val cache: MutableMap<String, Map<String, List<String>>> = mutableMapOf()
     val gson = Gson()
 
     init {
         if (cache.isEmpty()) {
-            File(dir).listFiles()
+            dir.listFiles()
                 ?.filter { it.name.endsWith(".json") }
                 ?.forEach { f ->
                     val s = f.readText()
