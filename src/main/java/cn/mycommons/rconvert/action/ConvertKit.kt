@@ -9,7 +9,7 @@ object ConvertKit {
     fun getUserHome() = File(System.getProperty("user.home"))
 
     // const val dir = "/Users/ios-builder2/workspace/java-project/r-class-demo/r-ws-all"
-    val dir = File(System.getProperty("user.dir"), "r-ws-all")
+    val dir = File(getUserHome(), "r-ws-all")
 
     val cache: MutableMap<String, Map<String, List<String>>> = mutableMapOf()
     val gson = Gson()
